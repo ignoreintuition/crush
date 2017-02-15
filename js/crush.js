@@ -49,3 +49,14 @@ function groupBy (data, attr, metric){
 	// return the final array of values. 
 	return dataset;
 }
+
+
+function orderBy(data, s, o){
+	return data.sort(function(a, b) {
+		if (o==='asc'){
+			return parseFloat(a[s]) - parseFloat(b[s]);
+		} else {
+			return parseFloat(b[s]) - parseFloat(a[s]);
+		}
+	});
+}

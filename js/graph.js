@@ -32,3 +32,41 @@ function renderBarGraph (B, id, attr, metric, scale, cfg){
 		return d[attr] + ": " + d[metric];
 	})
 };
+
+function renderDonut(B, id, attr, metric, scale, cfg){
+	d3.select(id).selectAll("*").remove();
+
+	var chart = d3.select(id)
+	.attr("width", 400)
+	.attr("height", 400);
+	radius = 200;
+
+	var color = d3.scaleOrdinal(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+	var pie = d3.pie()
+	.sort(null)
+	.value(function(d) { return d[metric]; });
+
+	var path = d3.arc()
+	.outerRadius(radius - 10)
+	.innerRadius(0);
+
+	var label = d3.arc()
+	.outerRadius(radius - 40)
+	.innerRadius(radius - 40);
+
+	var arc = chart.selectAll("g")
+	.data(pie(B))
+	.enter().append("g")
+	.attr("class", "arc")
+	.attr("transform", "translate(" + 200 + "," + 200 + ")");
+
+	arc.append("path")
+	.attr("d", path)
+	.attr("fill", function(d) { return color(d.data[metric]); });
+
+	arc.append("text")
+	.attr("transform", function(d) { return "translate(" + label.centroid(d) + ")"; })
+	.attr("dy", "0.35em")
+	.text(function(d) { return d.data[attr]; });
+};
